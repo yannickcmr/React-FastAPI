@@ -1,0 +1,11 @@
+name: git_repository
+services:
+  fastapi:
+    container_name: FacilityAPI 
+    build:
+      context: ./
+      dockerfile: Dockerfile 
+    ports:
+      - '8001:8001'
+    restart: always
+
