@@ -1,3 +1,5 @@
+## 1st prompt.
+
 ### System Prompt
 > You are an expert in web development, javascript and react.
 > Always return the complete code. Make sure to return it completely.
@@ -123,7 +125,7 @@ app
 │   ├─ index.css
 │   ├─ Webpage
 │   │   ├─ Webpage.css
-│   │   ├─ Webpage.css
+│   │   ├─ Webpage.jsx
 │   ├─ Components
 │   │   ├─ ZoomMap
 │   │   │   ├─ ZoomMap.jsx
@@ -135,3 +137,76 @@ app
 │   │   │   ├─ InfoModal.jsx
 │   │   │   ├─ InfoModal.css
 ```
+
+
+
+## 2nd prompt.
+
+### System Prompt
+> You are an expert in web development, javascript and react.
+> Always return the complete code. Make sure to return it completely.
+> Never assume anything but only do the task you are told to do.
+
+### Task
+I need you to create two new components for my current working react (vite) web application. These two components should work as the markers of the app and display some information.
+
+Make the marker components dynamic and responsive to the user. Include *tool hints* and *hover over* functions.
+
+I will provide you with **Webpage.jsx** (main app) and **index.css**. You must make the new components work in the main app. Provide to me the necessary changes to **Webpage.jsx**.
+
+The components must be modern and minimalistic. Use minimal colours and use the **bento framework**. Also use some transparency for the metrics (* *) in order to make them less obstructive for the user.
+
+### Components
+I need you to create the following components:'FacilityLocation/FacilityLocation.jsx', 'FacilityLocation/FacilityLocation.css', 'Components/DemandPoint/DemandPoint.jsx', 'Components/DemandPoint/DemandPoint.css'
+
+**Note:** In some cases the **FacilityLocation** and the **DemandPoint** are on the same spot. Handle this case appropriately.
+
+#### FacilityLocation.jsx
+This component is going to represent the Facilities in this application. They will provide a service to the *DemandPoints* and this is represented by a line. 
+
+Use an appropriate pictogram for this component as the main body. In the middle of the pictogram, i want to display a number. When the user clicks this facility, the displayed number should switch to a different info. Make the facility toggle-able between states.
+
+For the first state, I want to display the total costs centrally. Under the total cost, i want a little metric info displaying the opening costs of this facility. 
+
+The second state should display the total number of connections to the DemandPoints. I might want to add a metric there later, so leave some options there.
+
+Add a simple option to delete this *FacilityLocation*.
+
+#### DemandPoint.jsx
+This component will represent the *DemandPoints* in this app. They will only have one connection to a *FacilityLocation*. 
+
+Use an appropriate pictogram for this component as the main body. In the middle of the pictogram, i want to display the cost for this *DemandPoint*.
+
+Add a simple option to delete this *DemandPoint*.
+
+### Directory
+Since I want the components to be 'plug-and-play', you must stick to the following directory layout:
+```bash
+app
+├─ public
+├─ src
+│   ├─ assets
+│   ├─ ...
+│   ├─ main.jsx
+│   ├─ index.css
+│   ├─ Webpage
+│   ├─ Components
+│   │   ├─ ZoomMap
+│   │   ├─ ...
+│   │   ├─ FacilityLocation
+│   │   │   ├─ FacilityLocation.jsx
+│   │   │   ├─ FacilityLocation.css
+│   │   ├─ DemandPoint
+│   │   │   ├─ DemandPoint.jsx
+│   │   │   ├─ DemandPoint.css
+```
+
+### Code
+
+#### Webpage.jsx
+
+#### index.css
+
+
+
+

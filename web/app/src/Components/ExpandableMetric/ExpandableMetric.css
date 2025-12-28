@@ -72,8 +72,8 @@
   }
 }
 
-.metric-value {
-  font-size: 20px;
+.metric-value-metric {
+  font-size: 3.6em !important;
   font-weight: 700;
   color: var(--accent-color);
   letter-spacing: -0.5px;
@@ -253,7 +253,7 @@
     max-width: 250px;
   }
 
-  .metric-value {
+  .metric-value-metric {
     font-size: 18px;
   }
 

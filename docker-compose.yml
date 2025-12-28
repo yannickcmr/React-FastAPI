@@ -3,9 +3,18 @@ services:
   fastapi:
     container_name: FacilityAPI 
     build:
-      context: ./
+      context: ./app/
       dockerfile: Dockerfile 
     ports:
       - '8001:8001'
     restart: always
 
+  react:
+    container_name: FacilityReact
+    build:
+      context: ./web/
+      dockerfile: Dockerfile
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000

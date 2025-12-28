@@ -6,6 +6,7 @@ DESCRIPTION = """
 
 ---
 ### 🚀 Quick Start
+This FastAPI implements some optimization algorithms such as the **Meyerson algorithm** for the online case as well as the **k-Means Clustering** algorithm for the offline facility location problem. In order to use the endpoints properly, please have a look at the two central classes, namely **Facility** and **Demand**. Both endpoints will return their optimal solution relative to the selected case.
 
 ---
 ### 🔍 Core Endpoints
@@ -14,11 +15,7 @@ DESCRIPTION = """
 | / | GET | Welcome entry point | None |
 | /ping |	GET |	Health check | log_lvl (optional) |
 | /versions |	GET |	API version info |	log_lvl (optional) |
-
----
-### 📊 Functions
-
----
-### ⚙️ Features
+| /online_facility_location |	POST |	Solver for the Online Facility Location Problem using the Meyerson Algorithm |	log_lvl (optional) |
+| /offline_facility_location |	POST |	Solver for the Offline Facility Location Problem using the k-Means Clustering Algorithm |	log_lvl (optional) |
 
 """

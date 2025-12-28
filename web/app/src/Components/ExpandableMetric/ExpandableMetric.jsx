@@ -31,7 +31,7 @@ const ExpandableMetric = ({ title, metric, subtitle, expandedContent, children }
 
       {!isExpanded && (
         <div className="metric-content">
-          <div className="metric-value">{metric}</div>
+          <div className="metric-value-metric">{metric}</div>
           {subtitle && <div className="metric-subtitle">{subtitle}</div>}
           {children && <div className="metric-children">{children}</div>}
         </div>

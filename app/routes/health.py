@@ -2,9 +2,9 @@
 
 from fastapi import APIRouter
 
-from app.config.logging_config import create_logger
-from app.validation.messages import MessageResponse
-from app.config.documentation import APP_VERSION
+from config.logging_config import create_logger
+from validation.messages import MessageResponse
+from config.documentation import APP_VERSION
 
 """ Logging Function """
 

@@ -1,0 +1,195 @@
+.demand-point {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main Demand Point Marker */
+.demand-marker {
+  position: relative;
+  z-index: 10;
+  width: 52px;
+  height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(74, 226, 124, 0.15) 0%, rgba(74, 226, 124, 0.05) 100%);
+  border: 2px solid rgba(74, 226, 124, 0.3);
+  box-shadow: 0 0 0 0 rgba(74, 226, 124, 0.1);
+  animation: demandShadow 2s infinite;
+}
+
+@keyframes demandShadow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(74, 226, 124, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 6px 1px rgba(74, 226, 124, 0.12);
+  }
+}
+
+.demand-marker:hover {
+  background: linear-gradient(135deg, rgba(74, 226, 124, 0.25) 0%, rgba(74, 226, 124, 0.1) 100%);
+  border-color: rgba(74, 226, 124, 0.5);
+  transform: scale(1.1);
+}
+
+.demand-marker:active {
+  transform: scale(0.92);
+}
+
+/* Pictogram */
+.demand-icon {
+  position: absolute;
+  width: 24px;
+  height: 24px;
+  color: rgba(74, 226, 124, 0.4);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Center Display */
+.demand-display {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.demand-cost-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+.demand-main-value {
+  font-size: 13px;
+  font-weight: 700;
+  opacity: 90%;
+  z-index: 2;
+  color: rgba(255, 255, 255, 0.75);
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
+}
+
+/* Tooltip */
+.demand-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: rgba(45, 45, 45, 0.95);
+  border: 1px solid rgba(74, 226, 124, 0.3);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  z-index: 1000;
+  font-size: 12px;
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  animation: tooltipFadeIn 0.2s ease;
+  pointer-events: none;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+.tooltip-title {
+  font-weight: 700;
+  color: rgba(74, 226, 124, 0.9);
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tooltip-line {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* Action Buttons */
+.demand-actions {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  animation: actionsSlideIn 0.3s ease;
+}
+
+@keyframes actionsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.action-button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba(45, 45, 45, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background: rgba(45, 45, 45, 1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.action-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.action-button.delete-button:hover {
+  color: var(--danger-color);
+  border-color: rgba(248, 113, 113, 0.3);
+  background: rgba(248, 113, 113, 0.05);
+}
+
+/* Bento Framework - Card-like appearance */
+.demand-marker {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.demand-marker:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}

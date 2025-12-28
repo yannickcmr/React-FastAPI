@@ -1,9 +1,12 @@
 import React, { useRef, useState, useEffect, useCallback } from 'react'
 import './ZoomMap.css'
+import FacilityLocation from '../FacilityLocation/FacilityLocation'
+import DemandPoint from '../DemandPoint/DemandPoint'
 
 const ZoomMap = ({ demands, facilities, connections, onAddPoint, onRemovePoint }) => {
   const canvasRef = useRef(null)
   const containerRef = useRef(null)
+  const markersContainerRef = useRef(null)
   const [offset, setOffset] = useState({ x: 0, y: 0 })
   const [zoom, setZoom] = useState(1)
   const [selectedPointType, setSelectedPointType] = useState('demand')
@@ -80,63 +83,8 @@ const ZoomMap = ({ demands, facilities, connections, onAddPoint, onRemovePoint }
     })
 
     ctx.globalAlpha = 1
-
-    // Draw demands (crosses)
-    console.log("zoom", zoom, "linewidth", parseFloat(2 / zoom))
-    ctx.strokeStyle = '#4ade80'
-    ctx.lineWidth = 2 / zoom
-    demands.forEach((demand) => {
-      const isHovered =
-        hoveredPoint?.type === 'demand' && hoveredPoint?.id === demand.demandID
-      const radius = isHovered ? POINT_RADIUS + 2 : POINT_RADIUS
-
-      // Draw cross
-      ctx.beginPath()
-      ctx.moveTo(demand.location[0] - radius, demand.location[1])
-      ctx.lineTo(demand.location[0] + radius, demand.location[1])
-      ctx.stroke()
-
-      ctx.beginPath()
-      ctx.moveTo(demand.location[0], demand.location[1] - radius)
-      ctx.lineTo(demand.location[0], demand.location[1] + radius)
-      ctx.stroke()
-
-      if (isHovered) {
-        ctx.strokeStyle = '#f87171'
-        ctx.globalAlpha = 0.6
-        ctx.beginPath()
-        ctx.arc(demand.location[0], demand.location[1], radius + 5, 0, Math.PI * 2)
-        ctx.stroke()
-        ctx.globalAlpha = 1
-        ctx.strokeStyle = '#4ade80'
-      }
-    })
-
-    // Draw facilities (circles)
-    ctx.strokeStyle = '#fbbf24'
-    ctx.lineWidth = 2 / zoom
-    facilities.forEach((facility) => {
-      const isHovered =
-        hoveredPoint?.type === 'facility' && hoveredPoint?.id === facility.facilityID
-      const radius = isHovered ? POINT_RADIUS + 2 : POINT_RADIUS
-
-      ctx.beginPath()
-      ctx.arc(facility.location[0], facility.location[1], radius, 0, Math.PI * 2)
-      ctx.stroke()
-
-      if (isHovered) {
-        ctx.strokeStyle = '#f87171'
-        ctx.globalAlpha = 0.6
-        ctx.beginPath()
-        ctx.arc(facility.location[0], facility.location[1], radius + 5, 0, Math.PI * 2)
-        ctx.stroke()
-        ctx.globalAlpha = 1
-        ctx.strokeStyle = '#fbbf24'
-      }
-    })
-
     ctx.restore()
-  }, [offset, zoom, demands, facilities, connections, hoveredPoint])
+  }, [offset, zoom, demands, facilities, connections])
 
   useEffect(() => {
     drawGrid()
@@ -279,9 +227,122 @@ const ZoomMap = ({ demands, facilities, connections, onAddPoint, onRemovePoint }
     }
   }, [handleCanvasMouseDown, handleCanvasMouseMove, handleCanvasMouseUp])
 
+  // Function to get screen coordinates from canvas coordinates
+  const getScreenCoordinates = useCallback((canvasX, canvasY) => {
+    const canvas = canvasRef.current
+    const rect = canvas.getBoundingClientRect()
+    return {
+      x: canvasX * zoom + offset.x + rect.left,
+      y: canvasY * zoom + offset.y + rect.top,
+    }
+  }, [offset, zoom])
+
+  // Helper function to check if two points are at the same location
+  const getCollidingPoints = useCallback((location, type) => {
+    const tolerance = 25
+    const collidingFacilities = facilities.filter(
+      (f) =>
+        Math.abs(f.location[0] - location[0]) < tolerance &&
+        Math.abs(f.location[1] - location[1]) < tolerance
+    )
+    const collidingDemands = demands.filter(
+      (d) =>
+        Math.abs(d.location[0] - location[0]) < tolerance &&
+        Math.abs(d.location[1] - location[1]) < tolerance
+    )
+
+    return {
+      facilities: collidingFacilities,
+      demands: collidingDemands,
+    }
+  }, [facilities, demands])
+
   return (
     <div className="zoom-map-container" ref={containerRef}>
       <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight} />
+
+      {/* Markers Container - Overlays on canvas */}
+      <div
+        className="markers-container"
+        ref={markersContainerRef}
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pointerEvents: 'none',
+        }}
+      >
+        {/* Render Facilities */}
+        {facilities.map((facility) => {
+          const screenCoords = getScreenCoordinates(
+            facility.location[0],
+            facility.location[1]
+          )
+          const collidingPoints = getCollidingPoints(facility.location, 'facility')
+          const isColliding = collidingPoints.demands.length > 0
+
+          return (
+            <div
+              key={`facility-${facility.facilityID}`}
+              style={{
+                position: 'absolute',
+                left: `${screenCoords.x}px`,
+                top: `${screenCoords.y}px`,
+                transform: 'translate(-50%, -50%)',
+                borderRadius: '10%',
+                border: isColliding ? '2px solid rgba(0, 255, 132, 1)' : '2px solid rgba(0, 221, 255, 1)',
+                boxShadow: isColliding ? '0 0 15px rgba(0, 255, 132, 1), inset 0 0 10px rgba(0, 255, 132, 1)' : '0 0 15px rgba(0, 221, 255, 1), inset 0 0 10px rgba(0, 221, 255, 1)' ,
+                transition: 'box-shadow 0.3s ease-in-out, border 0.3s ease-in-out',
+                pointerEvents: 'auto',
+                zIndex: isColliding ? 100 : 50,
+              }}
+            >
+              <FacilityLocation
+                facility={facility}
+                onRemovePoint={onRemovePoint}
+              />
+            </div>
+          )
+        })}
+
+        {/* Render Demand Points */}
+        {demands.map((demand) => {
+          const screenCoords = getScreenCoordinates(
+            demand.location[0],
+            demand.location[1]
+          )
+          const collidingPoints = getCollidingPoints(demand.location, 'demand')
+          const isColliding = collidingPoints.facilities.length > 0
+
+          if (isColliding) {
+            return <div key={`demand-${demand.demandID}`}></div>
+          }
+
+          return (
+            <div
+              key={`demand-${demand.demandID}`}
+              style={{
+                position: 'absolute',
+                left: `${screenCoords.x}px`,
+                top: `${screenCoords.y}px`,
+                transform: isColliding
+                  ? 'translate(-50%, -50%) translateX(20px)  translateZ(1)'
+                  : 'translate(-50%, -50%)',
+                pointerEvents: 'auto',
+                zIndex: isColliding ? 101 : 51,
+                transition: 'transform 0.3s ease',
+              }}
+            >
+              <DemandPoint
+                demand={demand}
+                onRemovePoint={onRemovePoint}
+              />
+            </div>
+          )
+        })}
+      </div>
 
       <div className="point-selector">
         <button
@@ -308,4 +369,4 @@ const ZoomMap = ({ demands, facilities, connections, onAddPoint, onRemovePoint }
   )
 }
 
-export default ZoomMap;
+export default ZoomMap

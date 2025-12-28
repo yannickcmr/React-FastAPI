@@ -3,8 +3,8 @@
 import random as rnd
 import numpy as np
 
-from app.model.model import Demand, Facility
-from app.config.logging_config import create_logger
+from model.model import Demand, Facility
+from config.logging_config import create_logger
 
 
 """ Logger Function """

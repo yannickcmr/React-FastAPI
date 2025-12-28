@@ -1,0 +1,220 @@
+.facility-location {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Main Facility Marker */
+.facility-marker {
+  position: relative;
+  z-index: 100;
+  width: 75px;
+  height: 75px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.45) 0%, rgba(74, 144, 226, 0.45) 100%);
+  border: 2px solid rgba(74, 144, 226, 0.3);
+  box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+  animation: facilityShadow 2s infinite;
+}
+
+@keyframes facilityShadow {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(74, 144, 226, 0.1);
+  }
+  50% {
+    box-shadow: 0 0 8px 2px rgba(74, 144, 226, 0.15);
+  }
+}
+
+.facility-marker:hover {
+  background: linear-gradient(135deg, rgba(74, 144, 226, 0.25) 0%, rgba(74, 144, 226, 0.1) 100%);
+  border-color: rgba(74, 144, 226, 0.5);
+  transform: scale(1.08);
+}
+
+.facility-marker:active {
+  transform: scale(0.95);
+}
+
+/* Pictogram */
+.facility-icon {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  color: rgba(74, 144, 226, 0.6);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Center Display */
+.facility-display {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.facility-cost-display,
+.facility-connections-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  gap: 2px;
+}
+
+.facility-main-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent-color);
+  line-height: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.facility-metric {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  font-size: 9px;
+  color: var(--text-secondary);
+  transition: opacity 0.3s ease;
+}
+
+.facility-marker:hover .facility-metric {
+  opacity: 0.8;
+}
+
+.metric-label {
+  color: rgba(255, 255, 255, 1.0);
+  font-size: 0.8em !important;
+}
+
+.metric-value {
+  color: rgb(227, 240, 255) !important;
+  font-size: 1.9em !important;
+}
+
+/* Tooltip */
+.facility-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  background: rgba(45, 45, 45, 0.95);
+  border: 1px solid rgba(74, 144, 226, 0.3);
+  border-radius: 6px;
+  padding: 8px 12px;
+  margin-bottom: 8px;
+  white-space: nowrap;
+  z-index: 1000;
+  font-size: 12px;
+  color: var(--text-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  animation: tooltipFadeIn 0.2s ease;
+  pointer-events: none;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+.tooltip-title {
+  font-weight: 700;
+  color: rgba(74, 144, 226, 0.9);
+  margin-bottom: 4px;
+  font-size: 11px;
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.tooltip-line {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* Action Buttons */
+.facility-actions {
+  position: absolute;
+  bottom: -35px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 6px;
+  animation: actionsSlideIn 0.3s ease;
+}
+
+@keyframes actionsSlideIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.action-button {
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 6px;
+  background: rgba(45, 45, 45, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.action-button:hover {
+  background: rgba(45, 45, 45, 1);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.action-button svg {
+  width: 16px;
+  height: 16px;
+}
+
+.action-button.delete-button:hover {
+  color: var(--danger-color);
+  border-color: rgba(248, 113, 113, 0.3);
+  background: rgba(248, 113, 113, 0.05);
+}
+
+/* Bento Framework - Card-like appearance */
+.facility-marker {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+}
+
+.facility-marker:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+}

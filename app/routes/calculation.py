@@ -2,13 +2,13 @@
 
 from fastapi import APIRouter
 
-from app.model.model import Demand, Facility
-from app.model.online_facility import OnlineFacilitySolver
-from app.model.offline_facility import OfflineFacilitySolver
+from model.model import Demand, Facility
+from model.online_facility import OnlineFacilitySolver
+from model.offline_facility import OfflineFacilitySolver
 
-from app.config.logging_config import create_logger
-from app.validation.messages import OnlineFacility, OfflineFacility
-from app.validation.messages import DataResponse, ErrorResponse
+from config.logging_config import create_logger
+from validation.messages import OnlineFacility, OfflineFacility
+from validation.messages import DataResponse, ErrorResponse
 
 
 """ Logging Function """

@@ -5,9 +5,9 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.routes import health, calculation
-from app.config.documentation import DESCRIPTION, APP_VERSION
-from app.config.logging_config import create_logger
+from routes import health, calculation
+from config.documentation import DESCRIPTION, APP_VERSION
+from config.logging_config import create_logger
 
 
 """ Logging Function """

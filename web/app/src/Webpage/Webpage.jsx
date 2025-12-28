@@ -1,7 +1,11 @@
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
+import Cookies from 'universal-cookie';
 import ZoomMap from '../Components/ZoomMap/ZoomMap'
 import ExpandableMetric from '../Components/ExpandableMetric/ExpandableMetric'
 import InfoModal from '../Components/InfoModal/InfoModal'
+import FacilityLocation from '../Components/FacilityLocation/FacilityLocation'
+import DemandPoint from '../Components/DemandPoint/DemandPoint'
+import WelcomeModal from '../Components/WelcomeModal/WelcomeModal'
 import { onlineFacilityLocation, offlineFacilityLocation } from '../api/api'
 import './Webpage.css'
 
@@ -131,14 +135,86 @@ const Webpage = () => {
     return `${symbol}${costChange.toFixed(1)}`
   }
 
+  const calculateFacilityDisplay = useCallback((demands, facilities) => {
+    console.log(demands, facilities);
+
+    const findDistance = (demand, facilities) => {
+      const cache = facilities.filter(x => x.connection.includes(demand.demandID))
+      const facility = cache[0];
+
+      if (!facility) return 0; // Add safety check
+
+      const x_distance = facility.location[0] - demand.location[0];
+      const y_distance = facility.location[1] - demand.location[1];
+
+      if (metric === 'euclidean') {
+        return Math.abs(x_distance) + Math.abs(y_distance)
+      } else {
+        const x_square = Math.pow(x_distance, 2);
+        const y_square = Math.pow(y_distance, 2);
+        return Math.sqrt(x_square + y_square);
+      }
+    };
+
+    const totalFacilityCost = (facility, demands) => {
+      const cache = demands.filter(x => facility.connection.includes(x.demandID))
+      // console.log("cache", cache)
+
+      var facility_cost = facility.openingCosts;
+      var test = cache.reduce((acc, item) => acc + findDistance(item, [facility]), 0);
+      // console.log("Costs", facility_cost, test);
+
+      return facility_cost + test;
+    }
+
+    // running update functions.
+    const updatedDemands = demands.map(item => ({
+      ...item,
+      distance: findDistance(item, facilities)
+    }));
+
+    const updatedFacilities = facilities.map(item => ({
+      ...item,
+      facilityCosts: totalFacilityCost(item, demands)
+    }));
+
+    // Only update if demands actually changed
+    setDemands(prev => {
+      if (JSON.stringify(prev) !== JSON.stringify(updatedDemands)) {
+        return updatedDemands;
+      }
+      return prev;
+    });
+
+    setFacilities(prev => {
+      if (JSON.stringify(prev) !== JSON.stringify(updatedFacilities)) {
+        return updatedFacilities;
+      }
+      return prev;
+    });
+  }, [metric])
+
+  useEffect(() => {
+    if (demands.length > 0 && facilities.length > 0) {
+      calculateFacilityDisplay(demands, facilities)
+    }
+  }, [demands, facilities, calculateFacilityDisplay])
+
+
   return (
     <div className="webpage">
+      <WelcomeModal />
+
       <ZoomMap
         demands={demands}
         facilities={facilities}
         connections={connections}
         onAddPoint={handleAddPoint}
         onRemovePoint={handleRemovePoint}
+        markerComponents={{
+          facility: FacilityLocation,
+          demand: DemandPoint
+        }}
       />
 
       <div className="metrics-container">
