@@ -43,10 +43,20 @@ docker-compose up -f 'docker-compose.yml' -d --build
 react-fastapi/
 ├── .github/        # Test Pipeline Workflow
 ├── app/            # FastAPI
+│   ├── Dockerfile
+│   ├── api.py
+│   ├── config
+│   ├── model
+│   ├── routes
+│   ├── validation
 ├── tests/          # Tests for the FastAPI
 ├── web/            # React Webapp.
+│   ├── Dockerfile
+│   ├── app
+│   │   ├── public
+│   │   ├── src
+│   ├── prompts
 ├── requirements.txt
-├── Dockerfile
 ├── docker-compose.yml
 ├── pytest.ini
 └── readme.md
