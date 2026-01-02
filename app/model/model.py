@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from config.logging_config import create_logger
+from app.config.logging_config import create_logger
 
 
 """ Logger Function """
