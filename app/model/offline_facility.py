@@ -83,7 +83,7 @@ class OfflineFacilitySolver:
         Logger.info(f"Assigned Demand [{demand.demandID}] to Facility [{facility.facilityID}]")
 
     def cluster_algorithm(self) -> None:
-        for i in range(1, self.parameter['iterations'] + 1):
+        for i in range(1, int(self.parameter['iterations']) + 1):
             Logger.debug(f"{'='*5} Clustering Round {i} {'='*5}")
 
             # resetting all connections.
