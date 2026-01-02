@@ -48,6 +48,6 @@ app.include_router(calculation.router)
 """ Testing """
 
 if __name__ == "__main__":
-    # Terminal: uvicorn app.api:app --reload --host 0.0.0.0 --port 8001
+    # Terminal: uvicorn api:app --reload --host 0.0.0.0 --port 8001
     Logger.info("=> Running React+FastAPI.")
     uvicorn.run("api:app", reload=True, port=8001)
