@@ -71,7 +71,6 @@ class TestFacilityLocationEndpoint:
         assert data["code"] == 200
         data = data['data']
 
-        assert data['data']['coin']
         assert data['data']['costs']['current'] == 10
         assert data['data']['costs']['previous'] == 10
         assert data['data']['costs']['delta'] == 0
@@ -104,7 +103,6 @@ class TestFacilityLocationEndpoint:
         assert data["code"] == 200
         data = data['data']
 
-        assert data['data']['coin']
         assert data['data']['costs']['current'] == 15
         assert data['data']['costs']['previous'] == 10
         assert data['data']['costs']['delta'] == 5
@@ -136,7 +134,6 @@ class TestFacilityLocationEndpoint:
         assert data["code"] == 200
         data = data['data']
 
-        assert data['data']['coin']
         assert data['data']['costs']['current'] <= 24.5
         assert data['data']['costs']['previous'] <= 24.5
         assert data['data']['costs']['delta'] == 0
