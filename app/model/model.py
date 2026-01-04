@@ -14,12 +14,18 @@ Logger.info("Logger initialized.")
 """ Classes """
 
 class Demand:
+    """ Default Demand Point Class. """
     def __init__(self, demandID: int = 0, location: tuple = (0, 0)):
         self.demandID = demandID
         self.location = location
     
     def log_demand(self) -> str:
-        cache = f'[{self.demandID} @ {self.location}]'
+        """ Method to log the current instance.
+
+        Returns:
+            str: Default Demand String.
+        """
+        cache = f'[D{self.demandID} @ {self.location}]'
         Logger.debug(f"{cache}")
         return cache
 
@@ -45,12 +51,18 @@ class Demand:
         return self
 
     def to_json(self) -> dict:
+        """ Method to return the current instance as a json.
+
+        Returns:
+            dict: Dict containing demandID and Location.
+        """
         return {
             'demandID': self.demandID,
             'location': self.location
         }
 
 class Facility:
+    """ Default Facility Class """
     def __init__(self, facilityID: int = 0, location: tuple = (0, 0), demands: list = None, openingCosts: float = 0.0):
         self.facilityID = facilityID
         self.location = location
@@ -58,8 +70,13 @@ class Facility:
         self.openingCosts = openingCosts
 
     def log_facility(self) -> str:
+        """ Method to return the current instance as a string.
+
+        Returns:
+            str: Default formatted string.
+        """
         demand = [x.log_demand() for x in self.demands]
-        cache = f"|{self.facilityID} @ {self.location}| serves {demand}"
+        cache = f"|F{self.facilityID} @ {self.location}| serves {demand}"
         Logger.debug(f"{cache}")
         return cache
 
@@ -90,6 +107,11 @@ class Facility:
         return self
 
     def to_json(self) -> dict:
+        """ Method to return the current instance as a json.
+
+        Returns:
+            dict: Dict containing facilityID, Location, etc.
+        """
         return {
             'facilityID': self.facilityID,
             'location': self.location,
@@ -129,8 +151,7 @@ class Facility:
         Logger.debug(f"Demand [{demand.demandID}] assigned to Facility [{self.facilityID}]")
 
     def reset_demand(self) -> None:
-        """ Method to reset self.demands to [].
-        """
+        """ Method to reset self.demands to []. """
         self.demands = []
         Logger.debug(f"{self.demands=}")
 
@@ -160,7 +181,8 @@ class Facility:
                 return -1.0
 
 
-""" Testing """
+        """_summary_
+        """""" Testing """
 
 if __name__ == "__main__":
     Logger.info("--> Running model.py")
@@ -175,7 +197,7 @@ if __name__ == "__main__":
     for demand in [demand_1, demand_2, demand_3, demand_4]:
         if facility_1.calculate_distance(demand) < 5.0:
             facility_1.add_demand(demand)
-            Logger.info(f"Added Demand [{demand.demandID}] to Facility [{facility_1.facilityID}]")
+            Logger.info(f"Added [D{demand.demandID}] to [F{facility_1.facilityID}]")
         
         else:
-            Logger.info(f"Demand [{demand.demandID}] too far from Facility [{facility_1.facilityID}]")
+            Logger.info(f"[D{demand.demandID}] too far from [F{facility_1.facilityID}]")

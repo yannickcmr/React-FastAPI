@@ -25,7 +25,8 @@ DEFAULT_PARAMETER = {
 """ Offline Facility Location Solver """
 
 class OfflineFacilitySolver:
-    def __init__(self, 
+    """ Offline Facility Location Solver using the k-means clustering algorithm. """
+    def __init__(self,
                  demands: list[Demand] = None,
                  facilities: list[Facility] = None,
                  parameter: dict = DEFAULT_PARAMETER,
@@ -39,6 +40,11 @@ class OfflineFacilitySolver:
         self.costs = {'current': 0.0, 'previous': 0.0, 'delta': 0.0}
 
     def calculate_costs(self) -> dict:
+        """ Method to calculate the current costs.
+
+        Returns:
+            dict: Dict containing current, previous and delta.
+        """
         # calculating costs.
         previous = self.costs['current']
         current = 0.0
@@ -69,7 +75,7 @@ class OfflineFacilitySolver:
 
         self.facilities.append(facility)
         self.demands.append(demand)
-        Logger.info(f"Added Demand [{demand.demandID}] to new Facility [{facility.facilityID}]")
+        Logger.info(f"Added [D{demand.demandID}] to new [F{facility.facilityID}]")
 
     def assign_facility(self, facility: Facility, demand: Demand) -> None:
         """ Method to assign a Demand instance to an existing Facility.
@@ -83,6 +89,7 @@ class OfflineFacilitySolver:
         Logger.info(f"Assigned Demand [{demand.demandID}] to Facility [{facility.facilityID}]")
 
     def cluster_algorithm(self) -> None:
+        """ Method to run the k-mean clustering algorithm. """
         for i in range(1, int(self.parameter['iterations']) + 1):
             Logger.debug(f"{'='*5} Clustering Round {i} {'='*5}")
 
@@ -91,15 +98,16 @@ class OfflineFacilitySolver:
                 facility.reset_demand()
 
             # assigning each Demand to the nearest Facility.
+            metric = self.parameter['metric']
             for demand in self.demands:
-                distances = {x: x.calculate_distance(demand, metric=self.parameter['metric']) for x in self.facilities}
+                distances = {x: x.calculate_distance(demand, metric) for x in self.facilities}
                 Logger.debug(F"Distances: {distances}")
 
                 facility, distance = min(distances.items(), key=lambda item: item[1])
                 Logger.debug(f"Min: [{facility.facilityID}] -> {distance=}")
 
                 facility.add_demand(demand)
-                Logger.debug(f"Added Demand [{demand.demandID}] to Facility [{facility.facilityID}]")
+                Logger.debug(f"Added [D{demand.demandID}] to [F{facility.facilityID}]")
 
             # calculating new Facility locations.
             for facility in self.facilities:
@@ -109,13 +117,18 @@ class OfflineFacilitySolver:
                 cache = np.array([x.location for x in facility.demands])
                 location = np.mean(cache, axis=0)
                 facility.location = (location[0], location[1])
-                Logger.debug(F"Facility [{facility.facilityID}] new Location: {facility.location}")
+                Logger.debug(F"[F{facility.facilityID}] new Location: {facility.location}")
 
         # checking for cost improvement.
         costs = self.calculate_costs()
         Logger.debug(F"Current costs: {costs['current']}")
 
     def current_instance(self) -> dict:
+        """ Method to return the current instance.
+
+        Returns:
+            dict: Offline Facility Location Solver instance.
+        """
         return {
             'demands': [x.to_json() for x in self.demands],
             'facilities': [x.to_json() for x in self.facilities],
@@ -130,10 +143,18 @@ class OfflineFacilitySolver:
 if __name__ == "__main__":
     Logger.info("Running Online Facility Location Solver")
 
-    test_demand = [Demand(demandID=i, location=(rnd.randint(-10, 10), rnd.randint(-10, 10))) for i in range(0, 5)]
-    test_facility = [Facility(facilityID=i, location=(rnd.randint(-10, 10), rnd.randint(-10, 10))) for i in range(0, 2)]
-    solver = OfflineFacilitySolver(test_demand, test_facility)
+    def random_point() -> tuple:
+        """ Random point in 2D generator.
+
+        Returns:
+            tuple: Point in 2D.
+        """
+        return (rnd.randint(-10, 10), rnd.randint(-10, 10))
+
+    test_demands = [Demand(demandID=i, location=random_point()) for i in range(0, 5)]
+    test_facilities = [Facility(facilityID=i, location=random_point()) for i in range(0, 2)]
+    solver = OfflineFacilitySolver(test_demands, test_facilities)
     solver.cluster_algorithm()
 
-    for facility in solver.facility:
-        Logger.info(f"{facility.log_facility()}")
+    for test_facility in solver.facility:
+        Logger.info(f"{test_facility.log_facility()}")

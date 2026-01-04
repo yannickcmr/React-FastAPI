@@ -38,6 +38,7 @@ class DataResponse(BaseModel):
         pass
 
 class ErrorResponse(BaseModel):
+    """ BaseModel for a default Error Response. """
     msg: str
     code: int = 400
     data: None = None

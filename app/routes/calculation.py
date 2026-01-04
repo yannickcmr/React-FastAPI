@@ -45,7 +45,7 @@ def online_facility_location(data: OnlineFacility, log_lvl: str = "info") -> Dat
     except Exception as e:
         Logger.warning(f"Could not initialize Classes: {e}")
         return ErrorResponse(msg=f"Could not initialize Classes: {e}")
-    
+
     # initializing solver.
     try:
         solver = OnlineFacilitySolver(
@@ -104,7 +104,7 @@ def offline_facility_location(data: OfflineFacility, log_lvl: str = "info") -> D
     except Exception as e:
         Logger.warning(f"Could not initialize Classes: {e}")
         return ErrorResponse(msg=f"Could not initialize Classes: {e}")
-    
+
     # initializing solver.
     try:
         solver = OfflineFacilitySolver(
@@ -121,7 +121,7 @@ def offline_facility_location(data: OfflineFacility, log_lvl: str = "info") -> D
         return ErrorResponse(msg=f"Could not initialize Solver: {e}")
 
 
-    # running Meyerson algorithm.
+    # running k-means algorithm.
     try:
         solver.calculate_costs()
         solver.cluster_algorithm()

@@ -17,7 +17,7 @@ Logger.info("Logger initialized.")
 
 DEFAULT_PARAMETER = {
     'probability': 1.0,
-    'openingCosts': 100,
+    'openingCosts': 100.0,
     'metric': 'euclidean'
 }
 
@@ -25,7 +25,8 @@ DEFAULT_PARAMETER = {
 """ Online Facility Location Solver """
 
 class OnlineFacilitySolver:
-    def __init__(self, 
+    """ Online Facility Location Solver using the Meyerson algorithm. """
+    def __init__(self,
                  demands: list[Demand] = None,
                  facilities: list[Facility] = None,
                  parameter: dict = DEFAULT_PARAMETER,
@@ -35,7 +36,7 @@ class OnlineFacilitySolver:
         self.demands = demands if demands is not None else []
         self.facilities = facilities if facilities is not None else []
         self.parameter = parameter
-        
+
         self.coin_flip = True
         self.costs = {'current': 0.0, 'previous': 0.0, 'delta': 0.0}
 
@@ -55,6 +56,11 @@ class OnlineFacilitySolver:
         return coin_flip
 
     def calculate_costs(self) -> dict:
+        """ Method to calculate the current costs.
+
+        Returns:
+            dict: Dict containing the current, previous and delta.
+        """
         # calculating costs.
         previous = self.costs['current']
         current = 0.0
@@ -111,7 +117,8 @@ class OnlineFacilitySolver:
             return
 
         # finding nearest Facility.
-        distances = {x: x.calculate_distance(demand, metric=self.parameter['metric']) for x in self.facilities}
+        metric = self.parameter['metric']
+        distances = {x: x.calculate_distance(demand, metric) for x in self.facilities}
         Logger.debug(f"Distance: {distances}")
 
         facility, distance = min(distances.items(), key=lambda item: item[1])
@@ -129,7 +136,7 @@ class OnlineFacilitySolver:
 
         else:
             self.assign_facility(facility, demand)
-        
+
         # updating costs.
         costs = self.calculate_costs()
         Logger.debug(F"Current costs: {costs['current']}")
@@ -151,12 +158,20 @@ class OnlineFacilitySolver:
 if __name__ == "__main__":
     Logger.info("Running Online Facility Location Solver")
 
-    test_demand = [Demand(demandID=i, location=(rnd.randint(-10, 10), rnd.randint(-10, 10))) for i in range(0, 5)]
+    def random_point() -> tuple:
+        """ Random point in 2D generator.
+
+        Returns:
+            tuple: Point in 2D.
+        """
+        return (rnd.randint(-10, 10), rnd.randint(-10, 10))
+
+    test_demands = [Demand(demandID=i, location=random_point()) for i in range(0, 5)]
     solver = OnlineFacilitySolver()
 
-    for demand in test_demand:
-        Logger.info(f"Current Demand: {demand.log_demand()}")
-        solver.meyerson_algorithm(demand)
+    for test_demand in test_demands:
+        Logger.info(f"Current Demand: {test_demand.log_demand()}")
+        solver.meyerson_algorithm(test_demand)
 
-    for facility in solver.facility:
-        Logger.info(f"{facility.log_facility()}")
+    for test_facility in solver.facility:
+        Logger.info(f"{test_facility.log_facility()}")

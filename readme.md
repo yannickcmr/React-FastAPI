@@ -1,4 +1,4 @@
-# FastAPI Business Sales API
+# React & FastAPI API
 
 ## 📋 Overview
 High-performance **FastAPI** application for solving the (online and offline) **Facility Location Problem** including a dynamic and interactive **React** frontend.
