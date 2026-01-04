@@ -18,7 +18,7 @@ class Demand:
     def __init__(self, demandID: int = 0, location: tuple = (0, 0)):
         self.demandID = demandID
         self.location = location
-    
+
     def log_demand(self) -> str:
         """ Method to log the current instance.
 
@@ -43,7 +43,7 @@ class Demand:
             if key not in data.keys():
                 Logger.warning(f"Could not find [{key}] in Demand data.")
                 return
-        
+
         # assigning values from request data.
         self.demandID = data['demandID']
         self.location = data['location']
@@ -63,7 +63,11 @@ class Demand:
 
 class Facility:
     """ Default Facility Class """
-    def __init__(self, facilityID: int = 0, location: tuple = (0, 0), demands: list = None, openingCosts: float = 0.0):
+    def __init__(self,
+                 facilityID: int = 0,
+                 location: tuple = (0, 0),
+                 demands: list = None,
+                 openingCosts: float = 0.0):
         self.facilityID = facilityID
         self.location = location
         self.demands = demands if demands is not None else []
@@ -94,7 +98,7 @@ class Facility:
             if key not in data.keys():
                 Logger.warning(f"Could not find [{key}] in Facility data.")
                 return
-        
+
         # assigning values from request data.
         self.facilityID = data['facilityID']
         self.location = data['location']
@@ -145,7 +149,7 @@ class Facility:
         if self.check_demand(demand):
             Logger.warning(f"Demand [{demand.demandID}] already served by Facility [{self.facilityID}]")
             return
-        
+
         # adding Demand to self.
         self.demands.append(demand)
         Logger.debug(f"Demand [{demand.demandID}] assigned to Facility [{self.facilityID}]")
@@ -169,7 +173,7 @@ class Facility:
         demand_location = np.array(demand.location)
         facility_location = np.array(self.location)
         distance_location = facility_location - demand_location
-        
+
         # calculating distance.
         match metric:
             case 'euclidean':
@@ -194,10 +198,10 @@ if __name__ == "__main__":
 
     facility_1 = Facility(1, (0, 0))
 
-    for demand in [demand_1, demand_2, demand_3, demand_4]:
-        if facility_1.calculate_distance(demand) < 5.0:
-            facility_1.add_demand(demand)
-            Logger.info(f"Added [D{demand.demandID}] to [F{facility_1.facilityID}]")
-        
+    for test_demand in [demand_1, demand_2, demand_3, demand_4]:
+        if facility_1.calculate_distance(test_demand) < 5.0:
+            facility_1.add_demand(test_demand)
+            Logger.info(f"Added [D{test_demand.demandID}] to [F{facility_1.facilityID}]")
+
         else:
-            Logger.info(f"[D{demand.demandID}] too far from [F{facility_1.facilityID}]")
+            Logger.info(f"[D{test_demand.demandID}] too far from [F{facility_1.facilityID}]")

@@ -1,7 +1,7 @@
 """ File containing the FastAPI Description. """
 
 APP_VERSION = "0.6.9"
-DESCRIPTION = """ 
+DESCRIPTION = """
 ## React + FastAPI Example for the online Facility Location Problem.
 
 ---

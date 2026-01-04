@@ -156,5 +156,5 @@ if __name__ == "__main__":
     solver = OfflineFacilitySolver(test_demands, test_facilities)
     solver.cluster_algorithm()
 
-    for test_facility in solver.facility:
+    for test_facility in solver.facilities:
         Logger.info(f"{test_facility.log_facility()}")

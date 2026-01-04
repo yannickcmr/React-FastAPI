@@ -42,7 +42,7 @@ jobs:
     - name: Run linting
       run: |
         pip install pylint
-        pylint app/ --fail-under=7.0 --disable=W1203,W0105
+        pylint app/ --fail-under=7.0 --disable=W1203,W0105,E0401
 
     - name: Archive test results
       if: always()

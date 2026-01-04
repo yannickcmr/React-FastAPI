@@ -142,6 +142,11 @@ class OnlineFacilitySolver:
         Logger.debug(F"Current costs: {costs['current']}")
 
     def current_instance(self) -> dict:
+        """ Method to return the current instance.
+
+        Returns:
+            dict: Dict containing demand, facilities, etc.
+        """
         return {
             'demands': [x.to_json() for x in self.demands],
             'facilities': [x.to_json() for x in self.facilities],
@@ -173,5 +178,5 @@ if __name__ == "__main__":
         Logger.info(f"Current Demand: {test_demand.log_demand()}")
         solver.meyerson_algorithm(test_demand)
 
-    for test_facility in solver.facility:
+    for test_facility in solver.facilities:
         Logger.info(f"{test_facility.log_facility()}")
